@@ -6,7 +6,7 @@ const helmet = require('helmet')
 const { NODE_ENV } = require('./config')
 const errorHandler = require('./middleware/error-handler')
 const logger = require('./logger')
-const todoRouter = require('./Posting/Posting-router')
+const postingRouter = require('./Posting/Posting-router')
 const salepersonRouter = require('./Sales_person/sales-person-router')
 const salesCommissionRouter = require('./Sales_Commission/Sales-Commission-router')
 
@@ -36,7 +36,7 @@ app.use(function validateBearerToken(req, res, next) {
 })  
 
 
-app.use('/api/postings', todoRouter)
+app.use('/api/postings', postingRouter)
 app.use('/api/salepeople', salepersonRouter)
 app.use('/api/saleCommission', salesCommissionRouter)
 
