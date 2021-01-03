@@ -35,6 +35,7 @@ app.use(function validateBearerToken(req, res, next) {
   next()
 })  
 
+
 app.use('/api/postings', todoRouter)
 app.use('/api/salepeople', salepersonRouter)
 app.use('/api/saleCommission', salesCommissionRouter)
