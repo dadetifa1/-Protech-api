@@ -19,7 +19,7 @@ app.use(morgan(morganOption, {
 app.use(cors())
 app.use(helmet())
 
-app.use(express.static('public'))
+// app.use(express.static('public'))
 
 app.use('/api/v1', todoRouter)
 
