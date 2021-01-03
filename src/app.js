@@ -5,7 +5,9 @@ const cors = require('cors')
 const helmet = require('helmet')
 const { NODE_ENV } = require('./config')
 const errorHandler = require('./middleware/error-handler')
-const todoRouter = require('./todo/todo-router')
+const todoRouter = require('./Posting/Posting-router')
+const salepersonRouter = require('./Sales_person/sales-person-router')
+const salesCommissionRouter = require('./Sales_Commission/Sales-Commission-router')
 
 const app = express()
 
@@ -19,9 +21,12 @@ app.use(morgan(morganOption, {
 app.use(cors())
 app.use(helmet())
 
-app.use(express.static('public'))
+// app.use(express.static('public'))
 
-app.use('/api/v1', todoRouter)
+app.use('/api/postings', todoRouter)
+app.use('/api/salepeople', salepersonRouter)
+app.use('/api/saleCommission', salesCommissionRouter)
+
 
 
 app.use(errorHandler)
