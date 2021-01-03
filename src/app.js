@@ -7,7 +7,6 @@ const { NODE_ENV } = require('./config')
 const errorHandler = require('./middleware/error-handler')
 const todoRouter = require('./todo/todo-router')
 
-const path = require('path')
 const app = express()
 
 const morganOption = (NODE_ENV === 'production')
