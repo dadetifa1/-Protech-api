@@ -68,10 +68,16 @@ const SalesCommissionService = {
       .where({'id': sales_commission_id})
       .delete()
   },
-  updateSaleCommission(db, sales_commission_id, newSalesCommission) {
+  updateSaleCommission(db, sales_commission_id, updatedSalesCommission) {
     return db('protech_sales_commission_hist')
       .where({id: sales_commission_id})
-      .update(newSalesCommission, returning=true)
+      .update(updatedSalesCommission, returning=true)
+      .returning('*')
+  },
+  updateSaleCommissionByPostingID(db, input_posting_id, updatedSalesCommission) {
+    return db('protech_sales_commission_hist')
+      .where({posting_id: input_posting_id})
+      .update(updatedSalesCommission, returning=true)
       .returning('*')
   }
 

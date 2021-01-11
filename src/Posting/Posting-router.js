@@ -18,7 +18,10 @@ const serializePosting = post => ({
   territory: xss(post.territory),
   vendor: xss(post.vendor),
   date_paid: xss(post.date_paid),
-  paid: xss(post.paid),
+  paid: post.paid,
+  sale_person_firstname : xss(post.first_name),
+  sale_person_lastname : xss(post.last_name),
+  sale_person_id: post.sales_person_id
 })
 
 
@@ -46,13 +49,13 @@ PostingRouter
 
   if (!sales_person_id) {
     return res.status(400).json({
-      error: { message: `Missing '${sales_person_id}' in request body` }
+      error: { message: `Missing 'Sales_person_id' in request body` }
     })
   }
 
   PostToAdd.date_paid = date_paid === "" ? null : date_paid;
 
-   PostingService.insertPostings(
+  PostingService.insertPostings(
     req.app.get('db'),
     PostToAdd
   )
@@ -113,7 +116,7 @@ PostingRouter
     .catch(next)
 })
 .patch(jsonParser, (req, res, next) => {
-  const { sales_number, invoice, dollar_amount, commission_percentage_fraction, commission_amount, po_number, customer, territory,date_paid, vendor, paid } = req.body
+  const { sales_number, invoice, dollar_amount, commission_percentage_fraction, commission_amount, po_number, customer, territory,date_paid, vendor, paid, sales_person_id} = req.body
   const PostToAdd = { sales_number, invoice, dollar_amount, commission_percentage_fraction, commission_amount, po_number, customer, territory, vendor, paid }
 
 
@@ -123,7 +126,13 @@ PostingRouter
         error: { message: `Missing '${key}' in request body` }
       })
     }
-}
+  }
+
+  if (!sales_person_id) {
+    return res.status(400).json({
+      error: { message: `Missing 'Sales_person_id' in request body` }
+    })
+  }
 
   PostToAdd.date_paid = date_paid === "" ? null : date_paid;
 
@@ -132,10 +141,22 @@ PostingRouter
     req.params.post_id,
     PostToAdd
   )
-    .then(updatedPost => {
-      res.status(200).json(serializePosting(updatedPost[0]))
-    })
+  .then(updatedPost => {
+    commission_rate = 100
+    posting_id = req.params.post_id
+    let update_commission_amount = Number(PostToAdd.dollar_amount) * commission_percentage_fraction
+
+    saleCommission = { posting_id , sales_person_id, commission_rate, commission_amount: update_commission_amount }
+
+    PostingService.updateSaleCommission(req.app.get('db'), saleCommission)
+    .then(data => "do nothing")
     .catch(next)
+    return updatedPost
+  })
+  .then(updatedPost => {
+    res.status(200).json(serializePosting(updatedPost[0]))
+  })
+  .catch(next)
 })
 
 
