@@ -17,7 +17,7 @@
   "engines": {
     "node": "12.16.1"
   },
-  "author": "Thomas `tomatao` Hudspith-Tatham <iammotivated@gmail.com>",
+  "author": "Dele Adetifa",
   "license": "MIT",
   "dependencies": {
     "cors": "^2.8.5",

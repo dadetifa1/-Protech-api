@@ -73,7 +73,7 @@ PostingRouter
   })
   .then(completedPost => {
     res.status(201)
-    .location(`/postings/${completedPost.id}`)
+    .location(`/api/postings/${completedPost.id}`)
     .json(serializePosting(completedPost))
   })
   .catch(next)
