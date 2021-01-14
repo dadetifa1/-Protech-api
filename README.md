@@ -26,7 +26,9 @@ NodeJS - Express - postgres - Git - Relationship DB
 
 ## API documentation
 
-Posting - requests
+###Posting - requests
+
+#### Get all
 
 * **URL**
 
@@ -41,8 +43,6 @@ Posting - requests
   
 * **Success Response:**
   
-  <_What should the status code be on success and is there any returned data? This is useful when people need to to know what their callbacks should expect!_>
-
   * **Code:** 200 <br />
     **Content:** `[
         {
@@ -65,8 +65,7 @@ Posting - requests
     ]`
  
 * **Error Response:**
-
-  <_Most endpoints will have many ways they can fail. From unauthorized access, to wrongful parameters etc. All of those should be liste d here. It might seem repetitive, but it helps prevent assumptions from being made where they should be._>
+  
 
   * **Code:** 401 UNAUTHORIZED <br />
     **Content:** `{ error : "Unauthorized request" }`
