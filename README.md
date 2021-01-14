@@ -108,6 +108,31 @@ NodeJS - Express - postgres - Git - Relationship DB
 
   * **Code:** 401 UNAUTHORIZED <br />
     **Content:** `{ error : "Unauthorized request" }`
+    
+ 
+**Delete a specific posting**
+
+ **URL**
+
+  /api/postings/:id
+
+* **Method:**
+  
+  `DELETE`
+  
+* **Header:**
+
+  Authorization
+  
+* **Success Response:**
+  
+  * **Code:** 204 <br />
+     
+* **Error Response:**
+  
+
+  * **Code:** 401 UNAUTHORIZED <br />
+    **Content:** `{ error : "Unauthorized request" }`
   
 
 
