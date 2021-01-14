@@ -26,11 +26,9 @@ NodeJS - Express - postgres - Git - Relationship DB
 
 ## API documentation
 
-**Posting - requests**
+**Get all**
 
-* **Get all**
-
-* **URL**
+ **URL**
 
   /api/postings
 
