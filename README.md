@@ -26,17 +26,31 @@ NodeJS - Express - postgres - Git - Relationship DB
 
 ## API documentation
 
-Posting
-
-api/postings
+Posting - requests
 
 * **URL**
 
-  <_The URL Structure (path only, no root url)_>
+  /api/postings
 
 * **Method:**
   
-  <_The request type_>
+  `GET`
+* **Header:**
+  Authorization
+  
+* **Success Response:**
+  
+  <_What should the status code be on success and is there any returned data? This is useful when people need to to know what their callbacks should expect!_>
 
-  `GET` | `POST` | `DELETE` | `PUT`
+  * **Code:** 200 <br />
+    **Content:** `{ id : 12 }`
+ 
+* **Error Response:**
+
+  <_Most endpoints will have many ways they can fail. From unauthorized access, to wrongful parameters etc. All of those should be liste d here. It might seem repetitive, but it helps prevent assumptions from being made where they should be._>
+
+  * **Code:** 401 UNAUTHORIZED <br />
+    **Content:** `{ error : "Log in" }`
+  
+
 
