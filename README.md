@@ -24,5 +24,19 @@ Sales collection(s):
 ## Tech used 
 NodeJS - Express - postgres - Git - Relationship DB
 
+## API documentation
 
+Posting
+
+api/postings
+
+* **URL**
+
+  <_The URL Structure (path only, no root url)_>
+
+* **Method:**
+  
+  <_The request type_>
+
+  `GET` | `POST` | `DELETE` | `PUT`
 
