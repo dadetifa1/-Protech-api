@@ -134,6 +134,45 @@ NodeJS - Express - postgres - Git - Relationship DB
   * **Code:** 401 UNAUTHORIZED <br />
     **Content:** `{ error : "Unauthorized request" }`
   
+**Update a specific posting**
 
+ **URL**
+
+  /api/postings/:id
+
+* **Method:**
+  
+  `PATCH`
+* **Header:**
+
+  Authorization
+  
+* **Success Response:**
+  
+  * **Code:** 200 <br />
+    **Content:** ` {
+            "id": 1,
+            "sales_number": "Sales Number",
+            "invoice": "Invoice Number",
+            "dollar_amount": "$23.00",
+            "commission_percentage_fraction": "0.0900",
+            "commission_amount": 24,
+            "po_number": "PO number 243",
+            "customer": "Customer 23",
+            "territory": "Canada-RH",
+            "vendor": "Vendor",
+            "date_paid": null,
+            "paid": false,
+            "first_name": "John",
+            "last_name": "Doe",
+            "sales_person_id": 1
+        }`
+ 
+* **Error Response:**
+  
+
+  * **Code:** 401 UNAUTHORIZED <br />
+    **Content:** `{ error : "Unauthorized request" }`
+  
 
 
