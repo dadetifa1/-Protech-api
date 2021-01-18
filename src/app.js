@@ -1,47 +1,44 @@
-require('dotenv').config()
-const express = require('express')
-const morgan = require('morgan')
-const cors = require('cors')
-const helmet = require('helmet')
-const { NODE_ENV } = require('./config')
-const errorHandler = require('./middleware/error-handler')
-const logger = require('./logger')
-const postingRouter = require('./Posting/Posting-router')
-const salepersonRouter = require('./Sales_person/sales-person-router')
-const salesCommissionRouter = require('./Sales_Commission/Sales-Commission-router')
+require("dotenv").config();
+const express = require("express");
+const morgan = require("morgan");
+const cors = require("cors");
+const helmet = require("helmet");
+const { NODE_ENV } = require("./config");
+const errorHandler = require("./middleware/error-handler");
+const logger = require("./logger");
+const postingRouter = require("./Posting/Posting-router");
+const salepersonRouter = require("./Sales_person/sales-person-router");
+const salesCommissionRouter = require("./Sales_Commission/Sales-Commission-router");
 
-const app = express()
+const app = express();
 
-const morganOption = (NODE_ENV === 'production')
-  ? 'tiny'
-  : 'common';
+const morganOption = NODE_ENV === "production" ? "tiny" : "common";
 
-app.use(morgan(morganOption, {
-  skip: () => NODE_ENV === 'test',
-}))
-app.use(cors())
-app.use(helmet())
+app.use(
+  morgan(morganOption, {
+    skip: () => NODE_ENV === "test",
+  })
+);
+app.use(cors());
+app.use(helmet());
 
 // app.use(express.static('public'))
 app.use(function validateBearerToken(req, res, next) {
-  const apiToken = process.env.API_TOKEN
-  const authToken = req.get('Authorization')
+  const apiToken = process.env.API_TOKEN;
+  const authToken = req.get("Authorization");
 
-  if (!authToken || authToken.split(' ')[1] !== apiToken) {
+  if (!authToken || authToken.split(" ")[1] !== apiToken) {
     logger.error(`Unauthorized request to path: ${req.path}`);
-    return res.status(401).json({ error: 'Unauthorized request' })
+    return res.status(401).json({ error: "Unauthorized request" });
   }
   // move to the next middleware
-  next()
-})  
+  next();
+});
 
+app.use("/api/postings", postingRouter);
+app.use("/api/salepeople", salepersonRouter);
+app.use("/api/saleCommission", salesCommissionRouter);
 
-app.use('/api/postings', postingRouter)
-app.use('/api/salepeople', salepersonRouter)
-app.use('/api/saleCommission', salesCommissionRouter)
+app.use(errorHandler);
 
-
-
-app.use(errorHandler)
-
-module.exports = app
+module.exports = app;
