@@ -81,8 +81,8 @@ PostingRouter.route("/")
 
     PostingService.insertPostings(req.app.get("db"), PostToAdd)
       .then((AddedPost) => {
-        posting_id = AddedPost.id;
-        commission_rate = 100;
+        let posting_id = AddedPost.id;
+        let commission_rate = 100;
         let update_commission_amount =
           Number(PostToAdd.dollar_amount) * commission_percentage_fraction;
 
