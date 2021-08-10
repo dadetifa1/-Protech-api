@@ -26,11 +26,95 @@ const serializePosting = (post) => ({
   sale_person_id: post.sales_person_id,
 });
 
+const mappingPosting = (data) => {
+  let x = data.reduce((groups, item) => {
+    if (groups[item.id]) {
+      groups[item.id].descItems.push({
+        part_number: item.part_number,
+        qty: item.qty,
+        unit_cost: item.unit_cost,
+        so: item.so,
+        inv: item.inv,
+        ship_date: item.ship_date,
+      });
+    } else {
+      let {
+        id,
+        sales_number,
+        invoice,
+        dollar_amount,
+        commission_percentage_fraction,
+        commission_amount,
+        po_number,
+        customer,
+        territory,
+        vendor,
+        date_paid,
+        paid,
+        first_name,
+        last_name,
+        sales_person_id,
+      } = item;
+
+      let descItems = [];
+
+      if (
+        item.part_number != null &&
+        item.qty != null &&
+        item.unit_cost != null &&
+        item.so != null &&
+        item.inv != null &&
+        item.ship_date != null
+      ) {
+        descItems = [
+          {
+            part_number: item.part_number,
+            qty: item.qty,
+            unit_cost: item.unit_cost,
+            so: item.so,
+            inv: item.inv,
+            ship_date: item.ship_date,
+          },
+        ];
+      }
+
+      let me = {
+        id,
+        sales_number,
+        invoice,
+        dollar_amount,
+        commission_percentage_fraction,
+        commission_amount,
+        po_number,
+        customer,
+        territory,
+        vendor,
+        date_paid,
+        paid,
+        first_name,
+        last_name,
+        sales_person_id,
+        descItems,
+      };
+      groups[item.id] = me;
+    }
+
+    return groups;
+  }, {});
+
+  let mappedData = [];
+  for (const element in x) {
+    mappedData.push(x[element]);
+  }
+
+  return mappedData;
+};
+
 PostingRouter.route("/")
   .get((req, res, next) => {
     PostingService.getPostings(req.app.get("db"))
       .then((data) => {
-        res.json(data);
+        res.json(mappingPosting(data));
         next();
       })
       .catch(next);
@@ -49,6 +133,7 @@ PostingRouter.route("/")
       vendor,
       paid,
       sales_person_id,
+      descItems,
     } = req.body;
     const PostToAdd = {
       sales_number,
@@ -77,6 +162,12 @@ PostingRouter.route("/")
       });
     }
 
+    if (!descItems) {
+      return res.status(400).json({
+        error: { message: `Missing 'descItems' in request body` },
+      });
+    }
+
     PostToAdd.date_paid = date_paid === "" ? null : date_paid;
 
     PostingService.insertPostings(req.app.get("db"), PostToAdd)
@@ -96,6 +187,18 @@ PostingRouter.route("/")
         PostingService.insertSaleCommission(req.app.get("db"), saleCommission)
           .then((data) => "do nothing")
           .catch(next);
+
+        if (descItems.length !== 0) {
+          descItems.forEach((element) => {
+            element.post_id = AddedPost.id;
+            element.po_number = AddedPost.po_number;
+          });
+
+          PostingService.insertDescriptionItem(req.app.get("db"), descItems)
+            .then((data) => "do nothing")
+            .catch(next);
+        }
+
         return AddedPost;
       })
       .then((completedPost) => {
@@ -114,20 +217,22 @@ PostingRouter.route("/:post_id")
         error: { message: `Invalid id` },
       });
     }
-    PostingService.getPostingsById(req.app.get("db"), req.params.post_id)
+    // PostingService.getPostingsById(req.app.get("db"), req.params.post_id)
+    PostingService.getNewPost(req.app.get("db"), req.params.post_id)
       .then((post) => {
-        if (!post) {
+        if (!post || post.rowCount === 0) {
           return res.status(404).json({
             error: { message: `Post doesn't exist` },
           });
         }
-        res.post = post;
+        res.post = post.rows[0].post;
         next();
       })
       .catch(next);
   })
   .get((req, res, next) => {
-    res.json(serializePosting(res.post));
+    // res.json(serializePosting(res.post));
+    res.json(res.post);
   })
   .delete((req, res, next) => {
     PostingService.deletePostings(req.app.get("db"), req.params.post_id)
